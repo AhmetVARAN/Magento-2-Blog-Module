@@ -491,7 +491,8 @@ class Index extends \Magento\Framework\View\Element\Template
         $this->blogFactory = $blogFactory;
         parent::__construct($context, $data);
     }
-    //Function for gettin blog data
+    
+    //Function for getting blog data
     public function getBlogEntities(){
         $blog = $this->blogFactory->create();
         $colletcion = $blog->getCollection();
