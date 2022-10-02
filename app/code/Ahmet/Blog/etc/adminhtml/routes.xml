@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
-    <router id="admin">
-        <route frontName="ahmet_blog" id="ahmet_blog">
+    <router id="admin">     <!-- for admin routes-->
+        <route frontName="ahmet_blog" id="ahmet_blog">  <!-- id will use for naming at routing admin layout -->
             <module name="Ahmet_Blog"/>
         </route>
     </router>
