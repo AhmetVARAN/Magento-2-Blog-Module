@@ -1,6 +1,6 @@
 
 Bu repo Magento 2 için blog modülü hazırlamayı kapsamaktadır.
-
+## Modül Oluşturma
 Bir modülün çalışabilmesi için mutlaka olması gereken 2 dosya vardır.
 * registration.php
 * module.xml
@@ -15,6 +15,7 @@ VendorName->ModuleName->etc->module.xml dosyasında modül ismini belirtiyoruz.
 
 ```
 VendorName->ModuleName->registration.php dosyasında modülümüzü tanımlıyoruz.
+* Ahmet\Blog\registration.php
 ```
 <?php
     /**
@@ -31,10 +32,10 @@ VendorName->ModuleName->registration.php dosyasında modülümüzü tanımlıyor
 Modülü oluşturduktan aktif hale getirmek için 
 ```php bin/magento module:enable VendorName_ModuleName```
 komutunu çalıştırıyoruz.
-![img.png](img.png)
-
+## Frontend
 Ön panelde blog içeriklerini görüntüleyebilmek için bir adres tanımlaması yapmamız gerekli.
 Bunun için öncelikle moduleName->etc->frontend->routes.xml dosyası oluşturuyoruz.
+* Blog\etc\frontend\routes.xml 
 ```
 <?xml version="1.0" ?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
@@ -47,7 +48,7 @@ Bunun için öncelikle moduleName->etc->frontend->routes.xml dosyası oluşturuy
 ```
 Ardından controller oluşturmamız gerekli.
 moduleName->Controller->controllerName->action.php
-Blog->Controller->Blog->Index.php dosyasını oluşturuyoruz.
+* Blog\Controller\Blog\Index.php 
 ```
 <?php
 
@@ -71,7 +72,10 @@ class Index extends \Magento\Framework\App\Action\Action
     }
 }
 ```
-Sayfamıza template giydirmek için view->frontend->layout->routeName_controller_action.xml dosyası oluşturmamız gerekli.
+Adreste görüntüleyeceğimiz sayfayı oluşturmak için <br>
+moduleName->view->frontend->layout->routeName_controller_action.xml dosyası oluşturmamız gerekli.
+
+* Ahmet\Blog\view\frontend\layout\ahmet_blog_index.xml  
 ```
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
@@ -79,14 +83,15 @@ Sayfamıza template giydirmek için view->frontend->layout->routeName_controller
         <block class="Ahmet\Blog\Block\Index" name="ahmet_blog_index" template="Ahmet_Blog::index.phtml" />
     </referenceContainer>
 </page>
-
 ```
-Referans verdiğimiz template dosyası için view->frontend->template->index.phtml dosyası oluşturuyoruz.
+Referans verdiğimiz template dosyası için view->frontend->templates->index.phtml dosyası oluşturuyoruz.
+* Blog\view\frontend\templates\index.phtml
 ```
 <h1>Blog Contents Will Show In Here</h1>
 
 ```
 Layoutun çalışması için moduleName->Block->action.php dosyasını oluşturuyoruz.
+* Blog\Block\Index.php 
 ```
 <?php
 
@@ -99,12 +104,16 @@ class Index extends \Magento\Framework\View\Element\Template
 
 ```
 Oluşan adresimiz routeName/controller/action şeklinde olacaktır.
-routeName frontend->routes.xml dosyasında tanımlanmıştı.
+routeName : frontend->routes.xml dosyasında tanımlanmıştı.
 Artık adrese erişim sağlayabiliriz.
 ![frontlayout](https://user-images.githubusercontent.com/102433124/193470997-c16994f0-996f-4e26-a504-526de5db26b6.png)
 
+## Veritabanı Oluşturma
+
 Blog içeriklerimizi oluşturabilmek için veritabanı tablosu oluşturmamız gerekli.
-Bunun için etc->db_schema.xml dosyası oluşturarak veritabanı tablomuzu tanımlıyoruz.
+Bunun için moduleName->etc->db_schema.xml dosyası oluşturarak veritabanı tablomuzu tanımlıyoruz.
+
+* Blog\etc\db_schema.xml
 
 ```
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -122,7 +131,19 @@ Bunun için etc->db_schema.xml dosyası oluşturarak veritabanı tablomuzu tanı
 </schema>
 
 ```
-Admin panel için adres tanımlaması yapmak için etc->adminhtml->routes.xml dosyası oluşturuyoruz.
+* veritabanı ismi : ahmet_blog_blog_entity
+* post_id
+* title
+* content
+* url_key
+* created_at
+
+kolonlarını oluşturduk.
+## Admin Panel
+Admin panelde blog içerikleri için adres tanımlaması yapmak için  
+moduleName->etc->adminhtml->routes.xml dosyası oluşturuyoruz.
+
+* Blog\etc\adminhtml\routes.xml 
 ```
 <?xml version="1.0" ?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
@@ -134,7 +155,10 @@ Admin panel için adres tanımlaması yapmak için etc->adminhtml->routes.xml do
 </config>
 
 ```
-Controller->adminhtml->controllerName->action.php şeklinde controller dosyasını oluşturuyoruz.
+<b>NOT</b> router id="admin" satırı layoutun admin panele ait olduğunu göstermektedir.
+
+Ardından adres yönlendirmesi için <br>moduleName->Controller->adminhtml->controllerName->action.php şeklinde controller dosyasını oluşturuyoruz.<br>
+Blog\Controller\adminhtml\post\Index.php
 ```
 <?php
 
@@ -164,9 +188,9 @@ class Index extends \Magento\Backend\App\Action
 
 ```
 
-Ardından oluşturduğumuz adrese erişmek için bir menü oluşturuyoruz.
+Ardından oluşturduğumuz adrese erişmek admin panelde görünecek bir menü oluşturuyoruz.
 
-etc->adminhtml->menu.xml
+etc\adminhtml\menu.xml
 ```
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
@@ -181,7 +205,8 @@ Oluşan menü ve sayfa görünümü aşağıda yer almaktadır.
 ![2](https://user-images.githubusercontent.com/102433124/193471097-f14e804b-a9df-4294-b05d-1ef8b818159c.png)
 
 
-Veritabanı içeriklerine ulaşabilmek için etc->di.xml dosyası oluşturuyoruz.
+Veritabanı içeriklerine ulaşabilmek için etc\di.xml dosyası oluşturuyoruz.
+* etc\di.xml 
 
 ```
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
@@ -201,8 +226,9 @@ Veritabanı içeriklerine ulaşabilmek için etc->di.xml dosyası oluşturuyoruz
 </config>
 ```
 
-di.xml dosyasında belirttiğimiz model kaynaklarına ulabilmek için sırasıyla aşağıdaki dosyaları oluşturuyoruz.
-* moduleName->Model->Blog.php
+di.xml dosyasında belirttiğimiz model kaynaklarına ulaşabilmek için sırasıyla aşağıdaki dosyaları oluşturuyoruz.
+* Blog\Model\Blog.php
+
 ```
 <?php
 
@@ -235,7 +261,7 @@ class Blog extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
 }
 
 ```
-* moduleName->Model->ResourceModel->Blog.php
+* Blog\Model\ResourceModel\Blog.php
 ```
 <?php
 
@@ -259,7 +285,7 @@ class Blog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 }
 
 ```
-* moduleName->Model->ResourceModel->Blog->Collection.php
+* Blog\Model\ResourceModel\Blog\Collection.php
 ```
 <?php
 
@@ -285,8 +311,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
 ```
 
-Veritabanından çekilen verileri adminpanelde görmek için layout belirtiyoruz.
-view->adminhtml->layout->ahmet_blog_post_index.xml dosyası oluşturuyoruz.
+Veritabanından çekilen verileri admin panelde görmek için layout belirtiyoruz.
+* view\adminhtml\layout\ahmet_blog_post_index.xml
 
 ```
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
@@ -299,7 +325,9 @@ view->adminhtml->layout->ahmet_blog_post_index.xml dosyası oluşturuyoruz.
 </page>
 
 ```
-Ardından görsele dökebilmek için view->adminhtml->ui_component->ahmet_blog_blog_listing.xml dosyasını oluşturuyoruz.
+Ardından görsele dökebilmek için ve çeşitli eklentiler uygulayabilmek için 
+* view\adminhtml\ui_component\ahmet_blog_blog_listing.xml <br>
+dosyasını oluşturuyoruz.
 
 ```
     <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
@@ -416,7 +444,7 @@ Ardından görsele dökebilmek için view->adminhtml->ui_component->ahmet_blog_b
                         <item name="editor" xsi:type="array">
                             <item name="editorType" xsi:type="string">text</item>
                             <item name="validation" xsi:type="array">
-                                <item name="required-entry" xsi:type="boolean">true</item>
+                                <item name="required-entry" xsi:type=boolean">true</item>
                             </item>
                         </item>
                         <item name="label" xsi:type="string" translate="true">URL</item>
@@ -437,13 +465,16 @@ Ardından görsele dökebilmek için view->adminhtml->ui_component->ahmet_blog_b
     </listing>
 
 ```
+
 Veritabanından çekilen içeriklerin admin panelde gösterimi
 ![6](https://user-images.githubusercontent.com/102433124/193471084-a31ee85c-3012-4f6b-9b2a-f3d5a52602a1.png)
 
 
+## Frontend Blog Listeleme
+Blog içeriklerini ön panel de göstermek için öncelikle moduleName->Block->action.php dosyasını düzenliyoruz.
 
-Blog içeriklerini ön panel de göstermek için öncelikle
-Ahmet->Blog->Block->Index.php dosyasını düzenliyoruz.
+* Blog\Block\Index.php dosyası 
+
 ```
 <?php
 
@@ -471,16 +502,19 @@ class Index extends \Magento\Framework\View\Element\Template
     }
 }
 ```
-Factory design pattern yapısı kullanarak getBlogEntities() fonksiyonu ile veritabanından veri çekiyoruz.
+Factory design pattern yapısı kullanarak ```getBlogEntities()``` fonksiyonu ile veritabanından veri çekiyoruz.
 
-Çektiğimiz verileri ön panelde göstermek için layout düzenliyoruz.
+Çektiğimiz verileri ön panelde göstermek için moduleName->view->frontend->templates->index.phtml dosyasını düzenliyoruz.
+
+* Blog\view\frontend\templates\index.phtml
+ 
 ```
 <?php
 /** @var $block Ahmet\Blog\Block\Index */
 ?>
 
 <style>
-    table {  font-family: arial, sans-serif;  border-collapse: collapse;  width: 100%;  margin-top: 30px;}
+    table {  font-family: arial, sans-serif;  border-collapse: collapse;  with: 100%;  margin-top: 30px;}
     td, th {  border: 1px solid #dddddd;  text-align: left;  padding: 8px;  }
     tr:nth-child(even) { background-color: #dddddd; }
     .post-id{width:2%} .post-name{width:30%}
@@ -510,4 +544,3 @@ Factory design pattern yapısı kullanarak getBlogEntities() fonksiyonu ile veri
 ```
 Verilerin ön panelde gösterimi görselde yer almaktadır.
 ![5](https://user-images.githubusercontent.com/102433124/193470968-794dafdc-cac6-4da8-ab1a-bc9239ded90d.png)
-
