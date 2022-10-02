@@ -101,8 +101,7 @@ class Index extends \Magento\Framework\View\Element\Template
 Oluşan adresimiz routeName/controller/action şeklinde olacaktır.
 routeName frontend->routes.xml dosyasında tanımlanmıştı.
 Artık adrese erişim sağlayabiliriz.
-
-![](../../../Users/a/Desktop/frontlayout.png)
+![frontlayout](https://user-images.githubusercontent.com/102433124/193470997-c16994f0-996f-4e26-a504-526de5db26b6.png)
 
 Blog içeriklerimizi oluşturabilmek için veritabanı tablosu oluşturmamız gerekli.
 Bunun için etc->db_schema.xml dosyası oluşturarak veritabanı tablomuzu tanımlıyoruz.
@@ -178,8 +177,9 @@ etc->adminhtml->menu.xml
 </config>
 ```
 Oluşan menü ve sayfa görünümü aşağıda yer almaktadır.
-![](C:\Users\a\Desktop\3.png)
-![](C:\Users\a\Desktop\2.png)
+![3](https://user-images.githubusercontent.com/102433124/193471095-412da8fa-3abc-4f6b-919a-e3f25e372d70.png)
+![2](https://user-images.githubusercontent.com/102433124/193471097-f14e804b-a9df-4294-b05d-1ef8b818159c.png)
+
 
 Veritabanı içeriklerine ulaşabilmek için etc->di.xml dosyası oluşturuyoruz.
 
@@ -438,8 +438,9 @@ Ardından görsele dökebilmek için view->adminhtml->ui_component->ahmet_blog_b
 
 ```
 Veritabanından çekilen içeriklerin admin panelde gösterimi
+![6](https://user-images.githubusercontent.com/102433124/193471084-a31ee85c-3012-4f6b-9b2a-f3d5a52602a1.png)
 
-![](C:\Users\a\Desktop\4.png)
+
 
 Blog içeriklerini ön panel de göstermek için öncelikle
 Ahmet->Blog->Block->Index.php dosyasını düzenliyoruz.
@@ -508,5 +509,5 @@ Factory design pattern yapısı kullanarak getBlogEntities() fonksiyonu ile veri
 </table>
 ```
 Verilerin ön panelde gösterimi görselde yer almaktadır.
-![](../../../Users/a/Desktop/5.png)
- 
+![5](https://user-images.githubusercontent.com/102433124/193470968-794dafdc-cac6-4da8-ab1a-bc9239ded90d.png)
+
