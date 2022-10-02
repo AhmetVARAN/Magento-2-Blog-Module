@@ -178,8 +178,9 @@ etc->adminhtml->menu.xml
 </config>
 ```
 Oluşan menü ve sayfa görünümü aşağıda yer almaktadır.
-![](C:\Users\a\Desktop\3.png)
-![](C:\Users\a\Desktop\2.png)
+
+![3](https://user-images.githubusercontent.com/102433124/193467642-0d15b6f0-ddef-418c-bd41-82068ada67ba.png)
+![2](https://user-images.githubusercontent.com/102433124/193467658-df9aceae-7030-4a09-83d5-19a6af32f26a.png)
 
 Veritabanı içeriklerine ulaşabilmek için etc->di.xml dosyası oluşturuyoruz.
 
@@ -438,5 +439,6 @@ Ardından görsele dökebilmek için view->adminhtml->ui_component->ahmet_blog_b
 
 ```
 Veritabanından çekilen içeriklerin admin panelde gösterimi
+![4](https://user-images.githubusercontent.com/102433124/193467713-ddd68a04-847f-4bc2-b0d2-19d20fe39d6d.png)
 
-![](C:\Users\a\Desktop\4.png)
+
