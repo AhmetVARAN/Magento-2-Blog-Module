@@ -1,0 +1,13 @@
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="ahmet_blog_blog_entity" resource="default" engine="innodb" comment="Blog Entity">
+        <column xsi:type="int" name="post_id" unsigned="false" nullable="false" identity="true" comment="Post ID"/>
+        <column xsi:type="varchar" name="title" nullable="false" length="255" comment="Post Title"/>
+        <column xsi:type="text" name="content" nullable="true"  comment="Content Area"/>
+        <column xsi:type="text" name="url_key" nullable="true"  comment="Url Key for Post" />
+        <column xsi:type="timestamp" name="created_at"  nullable="true" default="CURRENT_TIMESTAMP" on_update="false" comment="Created Date" />
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="post_id"/>
+        </constraint>
+    </table>
+</schema>
