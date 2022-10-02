@@ -509,3 +509,4 @@ Factory design pattern yapısı kullanarak getBlogEntities() fonksiyonu ile veri
 ```
 Verilerin ön panelde gösterimi görselde yer almaktadır.
 ![](../../../Users/a/Desktop/5.png)
+ 
