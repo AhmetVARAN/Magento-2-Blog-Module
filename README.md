@@ -39,8 +39,8 @@ Bunun için öncelikle moduleName->etc->frontend->routes.xml dosyası oluşturuy
 ```
 <?xml version="1.0" ?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
-    <router id="standard">
-        <route frontName="ahmet" id="ahmet">
+    <router id="standard">  <!-- for frontend routes-->
+        <route frontName="ahmet" id="ahmet">    <!-- id will use for naming at routing frontend layout -->
             <module name="Ahmet_Blog"/>
         </route>
     </router>
@@ -147,8 +147,8 @@ moduleName->etc->adminhtml->routes.xml dosyası oluşturuyoruz.
 ```
 <?xml version="1.0" ?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
-    <router id="admin">
-        <route frontName="ahmet_blog" id="ahmet_blog">
+    <router id="admin">     <!-- for admin routes-->
+        <route frontName="ahmet_blog" id="ahmet_blog">      <!-- id will use for naming at routing admin layout -->
             <module name="Ahmet_Blog"/>
         </route>
     </router>
@@ -491,7 +491,7 @@ class Index extends \Magento\Framework\View\Element\Template
         $this->blogFactory = $blogFactory;
         parent::__construct($context, $data);
     }
-
+    //Function for gettin blog data
     public function getBlogEntities(){
         $blog = $this->blogFactory->create();
         $colletcion = $blog->getCollection();
