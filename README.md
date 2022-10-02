@@ -102,7 +102,7 @@ Oluşan adresimiz routeName/controller/action şeklinde olacaktır.
 routeName frontend->routes.xml dosyasında tanımlanmıştı.
 Artık adrese erişim sağlayabiliriz.
 
-![image](https://user-images.githubusercontent.com/102433124/193461232-0eb2d047-d51e-4972-9744-1d9d66a25932.png)
+![](../../../Users/a/Desktop/frontlayout.png)
 
 Blog içeriklerimizi oluşturabilmek için veritabanı tablosu oluşturmamız gerekli.
 Bunun için etc->db_schema.xml dosyası oluşturarak veritabanı tablomuzu tanımlıyoruz.
@@ -440,3 +440,72 @@ Ardından görsele dökebilmek için view->adminhtml->ui_component->ahmet_blog_b
 Veritabanından çekilen içeriklerin admin panelde gösterimi
 
 ![](C:\Users\a\Desktop\4.png)
+
+Blog içeriklerini ön panel de göstermek için öncelikle
+Ahmet->Blog->Block->Index.php dosyasını düzenliyoruz.
+```
+<?php
+
+namespace Ahmet\Blog\Block;
+
+class Index extends \Magento\Framework\View\Element\Template
+{
+    protected BlogFactory $blogFactory;
+
+    public function __construct(
+        BlogFactory $blogFactory,
+        Template\Context $context, array $data = [])
+    {
+        $this->blogFactory = $blogFactory;
+        parent::__construct($context, $data);
+    }
+
+    public function getBlogEntities(){
+        $blog = $this->blogFactory->create();
+        $colletcion = $blog->getCollection();
+        if ($colletcion){
+            return $colletcion;
+        }
+        return [];
+    }
+}
+```
+Factory design pattern yapısı kullanarak getBlogEntities() fonksiyonu ile veritabanından veri çekiyoruz.
+
+Çektiğimiz verileri ön panelde göstermek için layout düzenliyoruz.
+```
+<?php
+/** @var $block Ahmet\Blog\Block\Index */
+?>
+
+<style>
+    table {  font-family: arial, sans-serif;  border-collapse: collapse;  width: 100%;  margin-top: 30px;}
+    td, th {  border: 1px solid #dddddd;  text-align: left;  padding: 8px;  }
+    tr:nth-child(even) { background-color: #dddddd; }
+    .post-id{width:2%} .post-name{width:30%}
+
+</style>
+
+<table>
+    <tr>
+        <th class="post-id">Id</th>
+        <th class="post-name">Title</th>
+        <th>Content</th>
+        <th>Url_Key</th>
+        <th>Created Time</th>
+    </tr>
+    <?php
+    foreach ($block->getBlogEntities() as $key=>$post){
+        echo '<tr>
+                    <td>'.$post->getPostId().'</td>
+                    <td>'.$post->getTitle().'</td>
+                    <td>'.$post->getContent().'</td>
+                    <td>'.$post->getUrlKey().'</td>
+                    <td>'.$post->getCreatedAt().'</td>
+                  </tr>';
+    }
+    ?>
+</table>
+```
+Verilerin ön panelde gösterimi görselde yer almaktadır.
+![](../../../Users/a/Desktop/5.png)
