@@ -545,7 +545,8 @@ Böylelikle silme işlemi gerçekleşirken seçilen tüm satırlar işleme tabi 
 Her model yenilenerek teker teker silinmektedir.
 
 Silme işlemine ait ekran görüntüsü
-![img_2.png](img_2.png)
+![massDelete](https://user-images.githubusercontent.com/102433124/193725312-efe390f3-f839-4582-ba86-09c601a08950.png)
+
 ## Frontend Blog Listeleme
 Blog içeriklerini ön panel de göstermek için öncelikle moduleName->Block->action.php dosyasını düzenliyoruz.
 
