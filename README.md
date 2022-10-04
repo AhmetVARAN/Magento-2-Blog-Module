@@ -469,7 +469,83 @@ dosyasını oluşturuyoruz.
 Veritabanından çekilen içeriklerin admin panelde gösterimi
 ![6](https://user-images.githubusercontent.com/102433124/193471084-a31ee85c-3012-4f6b-9b2a-f3d5a52602a1.png)
 
+## MassDelete İşlemi
 
+Admin panelde listelenen içerikleri silme işlemi yapmak için öncelikle ui_component altındaki xml dosyasında değişiklik yapmamız gerekli.
+* Ahmet\Blog\view\adminhtml\ui_component\ahmet_blog_blog_listing.xml
+
+```
+<argument name="requestFieldName" xsi:type="string">id</argument>
+```
+satırını
+```
+<argument name="requestFieldName" xsi:type="string">post_id</argument>
+
+```
+olarak değiştiriyoruz.
+
+Böylelikle oluşturacağımız controllerda işlem için gerekli olan istek alanının 'post_id' olduğunu belirtmiş oluyoruz.
+
+Ardından silme işlemi için controller oluşturmak gerekli.
+
+* Ahmet\Blog\Controller\adminhtml\post\MassDelete.php
+```
+<?php
+
+namespace Ahmet\Blog\Controller\adminhtml\post;
+
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Ui\Component\MassAction\Filter;
+use Ahmet\Blog\Model\ResourceModel\Blog\CollectionFactory;
+
+class MassDelete extends Action
+{
+    public $collectionFactory;
+
+    public $filter;
+
+    public function __construct(
+        Context $context,
+        Filter $filter,
+        CollectionFactory $collectionFactory,
+    ) {
+        $this->filter = $filter;
+        $this->collectionFactory = $collectionFactory;
+        parent::__construct($context);
+    }
+
+    public function execute()
+    {
+        try {
+            $collection = $this->filter->getCollection($this->collectionFactory->create());
+
+            $count = 0;
+            foreach ($collection as $model) {
+
+                $model->delete();
+                $count++;
+            }
+            $this->messageManager->addSuccess(__('A total of %1 blog(s) have been deleted.', $count));
+        } catch (\Exception $e) {
+            $this->messageManager->addError(__($e->getMessage()));
+        }
+        return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('*/*/index');
+    }
+}
+
+```
+
+```
+$this->filter->getCollection($this->collectionFactory->create());
+```
+satırı ile tüm blog içeriklerini alıyoruz ve getCollection metodu ile eylem filtrelemesinden geçiriyoruz.
+Böylelikle silme işlemi gerçekleşirken seçilen tüm satırlar işleme tabi tutulacaktır.
+Her model yenilenerek teker teker silinmektedir.
+
+Silme işlemine ait ekran görüntüsü
+![img_2.png](img_2.png)
 ## Frontend Blog Listeleme
 Blog içeriklerini ön panel de göstermek için öncelikle moduleName->Block->action.php dosyasını düzenliyoruz.
 
