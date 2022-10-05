@@ -129,5 +129,18 @@
                 </item>
             </argument>
         </column>
+        <actionsColumn name="delete_action" class="Ahmet\Blog\Ui\Component\Listing\Columns\DeleteAction">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="indexField" xsi:type="string">post_id</item>
+                    <item name="viewUrlPath" xsi:type="string">ahmet_blog/post/delete</item>
+                    <item name="urlEntityParamName" xsi:type="string">post_id</item>
+                    <item name="sortOrder" xsi:type="number">50</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Action</label>
+            </settings>
+        </actionsColumn>
     </columns>
 </listing>
