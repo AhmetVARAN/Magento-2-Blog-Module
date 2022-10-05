@@ -1,5 +1,5 @@
 <?php
-namespace Ahmet\Blog\Ui\Component\Listing\Columns;
+namespace Ahmet\Blog\Ui\Component\Listing\Column;
 
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
