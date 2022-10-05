@@ -1,6 +1,8 @@
 
-Bu repo Magento 2 için blog modülü hazırlamayı kapsamaktadır.
+Bu repo Magento 2 için blog modülü kapsamında post oluşturma, listeleme, silme işlemlerini kapsamaktadır.
+
 ## Modül Oluşturma
+
 Bir modülün çalışabilmesi için mutlaka olması gereken 2 dosya vardır.
 * registration.php
 * module.xml
@@ -15,6 +17,7 @@ VendorName->ModuleName->etc->module.xml dosyasında modül ismini belirtiyoruz.
 
 ```
 VendorName->ModuleName->registration.php dosyasında modülümüzü tanımlıyoruz.
+
 * Ahmet\Blog\registration.php
 ```
 <?php
@@ -32,9 +35,12 @@ VendorName->ModuleName->registration.php dosyasında modülümüzü tanımlıyor
 Modülü oluşturduktan aktif hale getirmek için 
 ```php bin/magento module:enable VendorName_ModuleName```
 komutunu çalıştırıyoruz.
+
 ## Frontend
+
 Ön panelde blog içeriklerini görüntüleyebilmek için bir adres tanımlaması yapmamız gerekli.
 Bunun için öncelikle moduleName->etc->frontend->routes.xml dosyası oluşturuyoruz.
+
 * Blog\etc\frontend\routes.xml 
 ```
 <?xml version="1.0" ?>
@@ -48,6 +54,7 @@ Bunun için öncelikle moduleName->etc->frontend->routes.xml dosyası oluşturuy
 ```
 Ardından controller oluşturmamız gerekli.
 moduleName->Controller->controllerName->action.php
+
 * Blog\Controller\Blog\Index.php 
 ```
 <?php
@@ -85,12 +92,14 @@ moduleName->view->frontend->layout->routeName_controller_action.xml dosyası olu
 </page>
 ```
 Referans verdiğimiz template dosyası için view->frontend->templates->index.phtml dosyası oluşturuyoruz.
+
 * Blog\view\frontend\templates\index.phtml
 ```
 <h1>Blog Contents Will Show In Here</h1>
 
 ```
 Layoutun çalışması için moduleName->Block->action.php dosyasını oluşturuyoruz.
+
 * Blog\Block\Index.php 
 ```
 <?php
@@ -139,7 +148,9 @@ Bunun için moduleName->etc->db_schema.xml dosyası oluşturarak veritabanı tab
 * created_at
 
 kolonlarını oluşturduk.
+
 ## Admin Panel
+
 Admin panelde blog içerikleri için adres tanımlaması yapmak için  
 moduleName->etc->adminhtml->routes.xml dosyası oluşturuyoruz.
 
@@ -158,7 +169,8 @@ moduleName->etc->adminhtml->routes.xml dosyası oluşturuyoruz.
 <b>NOT</b> router id="admin" satırı layoutun admin panele ait olduğunu göstermektedir.
 
 Ardından adres yönlendirmesi için <br>moduleName->Controller->adminhtml->controllerName->action.php şeklinde controller dosyasını oluşturuyoruz.<br>
-Blog\Controller\adminhtml\post\Index.php
+
+* Blog\Controller\adminhtml\post\Index.php
 ```
 <?php
 
@@ -190,7 +202,7 @@ class Index extends \Magento\Backend\App\Action
 
 Ardından oluşturduğumuz adrese erişmek admin panelde görünecek bir menü oluşturuyoruz.
 
-etc\adminhtml\menu.xml
+* etc\adminhtml\menu.xml
 ```
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
@@ -201,11 +213,13 @@ etc\adminhtml\menu.xml
 </config>
 ```
 Oluşan menü ve sayfa görünümü aşağıda yer almaktadır.
+
 ![3](https://user-images.githubusercontent.com/102433124/193471095-412da8fa-3abc-4f6b-919a-e3f25e372d70.png)
 ![2](https://user-images.githubusercontent.com/102433124/193471097-f14e804b-a9df-4294-b05d-1ef8b818159c.png)
 
 
 Veritabanı içeriklerine ulaşabilmek için etc\di.xml dosyası oluşturuyoruz.
+
 * etc\di.xml 
 
 ```
@@ -227,6 +241,7 @@ Veritabanı içeriklerine ulaşabilmek için etc\di.xml dosyası oluşturuyoruz.
 ```
 
 di.xml dosyasında belirttiğimiz model kaynaklarına ulaşabilmek için sırasıyla aşağıdaki dosyaları oluşturuyoruz.
+
 * Blog\Model\Blog.php
 
 ```
@@ -261,7 +276,9 @@ class Blog extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
 }
 
 ```
+
 * Blog\Model\ResourceModel\Blog.php
+
 ```
 <?php
 
@@ -285,7 +302,9 @@ class Blog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 }
 
 ```
+
 * Blog\Model\ResourceModel\Blog\Collection.php
+
 ```
 <?php
 
@@ -312,6 +331,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 ```
 
 Veritabanından çekilen verileri admin panelde görmek için layout belirtiyoruz.
+
 * view\adminhtml\layout\ahmet_blog_post_index.xml
 
 ```
@@ -325,7 +345,9 @@ Veritabanından çekilen verileri admin panelde görmek için layout belirtiyoru
 </page>
 
 ```
+
 Ardından görsele dökebilmek için ve çeşitli eklentiler uygulayabilmek için 
+
 * view\adminhtml\ui_component\ahmet_blog_blog_listing.xml <br>
 dosyasını oluşturuyoruz.
 
@@ -467,11 +489,13 @@ dosyasını oluşturuyoruz.
 ```
 
 Veritabanından çekilen içeriklerin admin panelde gösterimi
+
 ![6](https://user-images.githubusercontent.com/102433124/193471084-a31ee85c-3012-4f6b-9b2a-f3d5a52602a1.png)
 
 ## MassDelete İşlemi
 
 Admin panelde listelenen içerikleri silme işlemi yapmak için öncelikle ui_component altındaki xml dosyasında değişiklik yapmamız gerekli.
+
 * Ahmet\Blog\view\adminhtml\ui_component\ahmet_blog_blog_listing.xml
 
 ```
@@ -545,6 +569,7 @@ Böylelikle silme işlemi gerçekleşirken seçilen tüm satırlar işleme tabi 
 Her model yenilenerek teker teker silinmektedir.
 
 MassDelete işlemine ait ekran görüntüsü
+
 ![massDelete](https://user-images.githubusercontent.com/102433124/193725312-efe390f3-f839-4582-ba86-09c601a08950.png)
 
 ## Tekli Silme İşlemi
@@ -555,7 +580,8 @@ MassDelete işlemine ait ekran görüntüsü
 2. DeleteAction metodu oluşturmak
 3. Delete Controller oluşturmak
 
-İlk olarak Ahmet\Blog\view\adminhtml\ui_component\ahmet_blog_blog_listing.xml dosyasında silme eylemi için alan ekliyoruz.
+İlk olarak ```Ahmet\Blog\view\adminhtml\ui_component\ahmet_blog_blog_listing.xml``` dosyasında silme eylemi için alan ekliyoruz.
+
 ```
 <actionsColumn name="delete_action" class="Ahmet\Blog\Ui\Component\Listing\Columns\DeleteAction">
             <argument name="data" xsi:type="array">
@@ -583,8 +609,10 @@ post_id
 silme işleminde referans alınacak değeri işaret etmektedir.
 
 2. DeleteAction Sınıfı Oluşturmak 
-app/code/Ahmet/Blog/Ui/Component/Listing/Columns/DeleteAction.php
+
+* app/code/Ahmet/Blog/Ui/Component/Listing/Columns/DeleteAction.php
 dosyasını oluşturuyoruz.
+
 ```
 <?php
 namespace Ahmet\Blog\Ui\Component\Listing\Columns;
@@ -646,7 +674,8 @@ satırı ile her bir veri için ```[ ‘view’ => [ ‘href’ => ‘#’ , ‘
 
 3. Controller Oluşturmak
 
-Ui/Component/Listing/Columns/DeleteAction.php dosyası için Delete Controller oluşturmak gerekmektedir.
+```Ui/Component/Listing/Columns/DeleteAction.php``` dosyası için Delete Controller oluşturmak gerekmektedir.
+
 ```
 <?php
 
@@ -689,12 +718,373 @@ class Delete extends Action
 }
 
 ```
+
 ```post_id``` bilgisi ```getParam('post_id')``` ile alınmakta ve model yüklenmektedir.Olası başarı yada hata durumlarına karşılık mesaj eklendi ve silme işleminden sonra sayfa tekrar listeleme sayfasına yönlendirildi.
 
 Tekli silme işlemine ait ekran görüntüsü aşağıda yer almaktadır.
+
 ![singleDelete](https://user-images.githubusercontent.com/102433124/193952582-84d6bb86-0c4d-480c-845a-4717e6fddafe.png)
 
+## Form ile Blog Kaydetme
+
+Admin panelde blog içeriği kaydedebilmek için öncelikle blog index sayfasından controllera path vermemiz gerekli.Bunun için ```ahmet_blog_blog_listing.xml``` sayfasında oluşturacağımız controller için yol veriyoruz.
+
+Ardından app/code/Ahmet/Blog/Controller/adminhtml/post/ altında ```AddRow.php``` isimli controller oluşturuyoruz.
+
+* app/code/Ahmet/Blog/Controller/adminhtml/post/AddRow.php
+
+```
+<?php
+
+namespace Ahmet\Blog\Controller\adminhtml\post;
+use Magento\Framework\Controller\ResultFactory;
+class AddRow extends \Magento\Backend\App\Action
+{
+    /**
+     * @var \Magento\Framework\Registry
+     */
+    private $coreRegistry;
+
+    /**
+     * @var \Ahmet\Blog\Model\BlogFactory
+     */
+    private $blogFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry,
+     * @param \Ahmet\Blog\Model\BlogFactory $blogFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
+        \Ahmet\Blog\Model\BlogFactory $blogFactory
+    ) {
+        parent::__construct($context);
+        $this->coreRegistry = $coreRegistry;
+        $this->blogFactory = $blogFactory;
+    }
+
+    /**
+     * Mapped Blog List page.
+     * @return \Magento\Backend\Model\View\Result\Page
+     */
+    public function execute()
+    {
+        $rowId = (int) $this->getRequest()->getParam('id');
+        $rowData = $this->blogFactory->create();
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        if ($rowId) {
+            $rowData = $rowData->load($rowId);
+            $rowTitle = $rowData->getTitle();
+            if (!$rowData->getPostId()) {
+                $this->messageManager->addError(__('row data no longer exist.'));
+                $this->_redirect('ahmet/blog/rowdata');
+                return;
+            }
+        }
+
+        $this->coreRegistry->register('row_data', $rowData);
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $title = $rowId ? __('Edit Row Data ').$rowTitle : __('Add Post');
+        $resultPage->getConfig()->getTitle()->prepend($title);
+        return $resultPage;
+    }
+
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Ahmet_blog::add_row');
+    }
+}
+
+```
+
+Ardından app/code/Ahmet/Blog/view/adminhtml/layout/ altında ```ahmet_blog_post_addrow.xml```  dosyasını oluşturuyoruz.
+
+* app/code/Ahmet/Blog/view/adminhtml/layout/ahmet_blog_post_addrow.xml
+```
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Ahmet\Blog\Block\Adminhtml\Blog\AddRow" name="add_row" />
+        </referenceContainer>
+    </body>
+</page>
+
+```
+
+Sonraki adımda app/code/Ahmet/Blog/Block/Adminhtml/Blog/ altında ```AddRow.php``` dosyasını oluşturuyoruz. Böylelikle oluşturacağımız form ile verileri alabileceğiz.
+
+* app/code/Ahmet/Blog/Block/Adminhtml/Blog/AddRow.php
+
+```
+<?php
+
+namespace Ahmet\Blog\Block\adminhtml\Blog;
+
+class AddRow extends \Magento\Backend\Block\Widget\Form\Container
+{
+    /**
+     * Core registry.
+     *
+     * @var \Magento\Framework\Registry
+     */
+    protected $_coreRegistry = null;
+
+    /**
+     * @param \Magento\Backend\Block\Widget\Context $context
+     * @param \Magento\Framework\Registry           $registry
+     * @param array                                 $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Widget\Context $context,
+        \Magento\Framework\Registry $registry,
+        array $data = []
+    )
+    {
+        $this->_coreRegistry = $registry;
+        parent::__construct($context, $data);
+    }
+
+    /**
+     * Initialize Imagegallery Images Edit Block.
+     */
+
+    protected function _construct()
+    {
+        $this->_objectId = 'row_id';
+        $this->_blockGroup = 'Ahmet_Blog';
+        $this->_controller = 'adminhtml_blog';
+        parent::_construct();
+        if ($this->_isAllowedAction('Ahmet_Blog::add_row')) {
+            $this->buttonList->update('save', 'label', __('Save'));
+        } else {
+            $this->buttonList->remove('save');
+        }
+        $this->buttonList->remove('reset');
+    }
+
+    /**
+     * Retrieve text for header element depending on loaded image.
+     *
+     * @return \Magento\Framework\Phrase
+     */
+    public function getHeaderText()
+    {
+        return __('Add Post Data');
+    }
+
+    /**
+     * Check permission for passed action.
+     *
+     * @param string $resourceId
+     *
+     * @return bool
+     */
+    protected function _isAllowedAction($resourceId)
+    {
+        return $this->_authorization->isAllowed($resourceId);
+    }
+
+    /**
+     * Get form action URL.
+     *
+     * @return string
+     */
+    public function getFormActionUrl()
+    {
+        if ($this->hasFormActionUrl()) {
+            return $this->getData('form_action_url');
+        }
+
+        return $this->getUrl('*/*/save');
+    }
+}
+
+```
+
+Verileri alacağımız formu oluşturmak için app/code/Ahmet/Blog/Block/Adminhtml/Blog/Edit/ altında ```Form.php``` dosyasını oluşturuyoruz. Bu dosyada kayıt formunda olmasını istediğimiz alanları oluşturuyoruz.
+
+* app/code/Ahmet/Blog/Block/Adminhtml/Blog/Edit/Form.php
+```
+<?php
+namespace Ahmet\Blog\Block\Adminhtml\Blog\Edit;
+
+class Form extends \Magento\Backend\Block\Widget\Form\Generic
+{
+    /**
+     * @var \Magento\Store\Model\System\Store
+     */
+    protected $_systemStore;
+
+    /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Framework\Registry             $registry
+     * @param \Magento\Framework\Data\FormFactory     $formFactory
+     * @param array                                   $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
+        array $data = []
+    )
+    {
+        parent::__construct($context, $registry, $formFactory, $data);
+    }
+
+    /**
+     * Prepare form.
+     *
+     * @return $this
+     */
+    protected function _prepareForm()
+    {
+        $dateFormat = $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
+        $model = $this->_coreRegistry->registry('row_data');
+        $form = $this->_formFactory->create(
+            ['data' => [
+                'id' => 'edit_form',
+                'enctype' => 'multipart/form-data',
+                'action' => $this->getData('action'),
+                'method' => 'post'
+            ]
+            ]
+        );
+
+        $form->setHtmlIdPrefix('smb_');
+        if ($model->getPostId()) {
+            $fieldset = $form->addFieldset(
+                'base_fieldset',
+                ['legend' => __('Edit Post Data'), 'class' => 'fieldset-wide']
+            );
+            $fieldset->addField('post_id', 'hidden', ['name' => 'post_id']);
+        } else {
+            $fieldset = $form->addFieldset(
+                'base_fieldset',
+                ['legend' => __('Add Post Data'), 'class' => 'fieldset-wide']
+            );
+        }
+
+        $fieldset->addField(
+            'title',
+            'text',
+            [
+                'name' => 'title',
+                'label' => __('Title'),
+                'id' => 'title',
+                'title' => __('Title'),
+                'class' => 'required-entry',
+                'required' => true,
+            ]
+        );
+        $fieldset->addField(
+            'content',
+            'text',
+            [
+                'name' => 'content',
+                'label' => __('Content'),
+                'id' => 'content',
+                'title' => __('Content'),
+                'class' => 'required-entry',
+                'required' => false,
+            ]
+        );
+        $fieldset->addField(
+            'url_key',
+            'text',
+            [
+                'name' => 'url_key',
+                'label' => __('Url Key'),
+                'id' => 'url_key',
+                'title' => __('Url Key'),
+                'class' => 'required-entry',
+                'required' => false,
+            ]
+        );
+
+        $form->setValues($model->getData());
+        $form->setUseContainer(true);
+        $this->setForm($form);
+
+        return parent::_prepareForm();
+    }
+}
+
+```
+
+Son olarak kayıt işlemini gerçekleştirmek için app/code/Ahmet/Blog/Controller/adminhtml/post/ altında ```Save.php``` dosyasını oluşturuyoruz.
+
+* app/code/Ahmet/Blog/Controller/adminhtml/post/Save.php
+
+```
+<?php
+
+namespace Ahmet\Blog\Controller\adminhtml\post;
+
+class Save extends \Magento\Backend\App\Action
+{
+    /**
+     * @var \Ahmet\Blog\Model\BlogFactory
+     */
+    var $blogFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Ahmet\Blog\Model\BlogFactory $blogFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Ahmet\Blog\Model\BlogFactory $blogFactory
+    ) {
+        parent::__construct($context);
+        $this->blogFactory = $blogFactory;
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    public function execute()
+    {
+        $data = $this->getRequest()->getPostValue();
+        if (!$data) {
+            $this->_redirect('ahmet/blog/addrow');
+            return;
+        }
+        try {
+            $rowData = $this->blogFactory->create();
+            $rowData->setData($data);
+            if (isset($data['id'])) {
+                $rowData->setPostId($data['id']);
+            }
+            $rowData->save();
+            $this->messageManager->addSuccess(__('Post has been successfully saved.'));
+        } catch (\Exception $e) {
+            $this->messageManager->addError(__($e->getMessage()));
+        }
+        $this->_redirect('ahmet/blog/index');
+    }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Ahmet_Blog::save');
+    }
+}
+
+```
+Yeni post kayıt işlemine ait görsel aşağıda yer almaktadır.
+
+![image](https://user-images.githubusercontent.com/102433124/194035921-1b081784-a145-48f3-a6b5-4aea8abdc1ca.png)
+![image](https://user-images.githubusercontent.com/102433124/194036302-31a9755a-5c3f-4ac7-ba05-b74dcc549849.png)
+
 ## Frontend Blog Listeleme
+
 Blog içeriklerini ön panel de göstermek için öncelikle moduleName->Block->action.php dosyasını düzenliyoruz.
 
 * Blog\Block\Index.php dosyası 
