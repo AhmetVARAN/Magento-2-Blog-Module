@@ -544,8 +544,155 @@ satırı ile tüm blog içeriklerini alıyoruz ve getCollection metodu ile eylem
 Böylelikle silme işlemi gerçekleşirken seçilen tüm satırlar işleme tabi tutulacaktır.
 Her model yenilenerek teker teker silinmektedir.
 
-Silme işlemine ait ekran görüntüsü
+MassDelete işlemine ait ekran görüntüsü
 ![massDelete](https://user-images.githubusercontent.com/102433124/193725312-efe390f3-f839-4582-ba86-09c601a08950.png)
+
+## Tekli Silme İşlemi
+
+Çoklu veri silme haricinde tekli veri silme işlemi de gerekebileceği için uygulanması gereken 3 adım vardır.
+
+1. Grid üzerine silme eylemi eklemek
+2. DeleteAction metodu oluşturmak
+3. Delete Controller oluşturmak
+
+İlk olarak Ahmet\Blog\view\adminhtml\ui_component\ahmet_blog_blog_listing.xml dosyasında silme eylemi için alan ekliyoruz.
+```
+<actionsColumn name="delete_action" class="Ahmet\Blog\Ui\Component\Listing\Columns\DeleteAction">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="indexField" xsi:type="string">post_id</item>
+                    <item name="viewUrlPath" xsi:type="string">ahmet_blog/post/delete</item>
+                    <item name="urlEntityParamName" xsi:type="string">post_id</item>
+                    <item name="sortOrder" xsi:type="number">50</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Action</label>
+            </settings>
+</actionsColumn>  
+```
+
+```
+<actionsColumn name="delete_action" class="Ahmet\Blog\Ui\Component\Listing\Columns\DeleteAction">
+```
+satırı silme işlemi için gerekli sınıfı referans göstermektedir.
+
+```
+post_id
+```
+silme işleminde referans alınacak değeri işaret etmektedir.
+
+2. DeleteAction Sınıfı Oluşturmak 
+app/code/Ahmet/Blog/Ui/Component/Listing/Columns/DeleteAction.php
+dosyasını oluşturuyoruz.
+```
+<?php
+namespace Ahmet\Blog\Ui\Component\Listing\Columns;
+
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+
+class DeleteAction extends \Magento\Ui\Component\Listing\Columns\Column
+{
+    public $urlBuilder;
+
+    public function __construct(
+        ContextInterface $context,
+        UiComponentFactory $uiComponentFactory,
+        UrlInterface $urlBuilder,
+        array $components = [],
+        array $data = []
+    ) {
+        $this->urlBuilder = $urlBuilder;
+        parent::__construct($context, $uiComponentFactory, $components, $data);
+    }
+
+    public function prepareDataSource(array $dataSource)
+    {
+        if (isset($dataSource['data']['items'])) {
+            foreach ($dataSource['data']['items'] as &$item) {
+                if (isset($item['post_id'])) {
+                    $viewUrlPath = $this->getData('config/viewUrlPath');
+                    $urlEntityParamName = $this->getData('config/urlEntityParamName');
+                    $item[$this->getData('name')] = [
+                        'view' => [
+                            'href' => $this->urlBuilder->getUrl(
+                                $viewUrlPath,
+                                [
+                                    $urlEntityParamName => $item['post_id'],
+                                ]
+                            ),
+                            'label' => __('Delete'),
+                        ],
+                    ];
+                }
+            }
+        }
+
+        return $dataSource;
+    }
+}
+
+```
+
+prepareDataSource fonksiyonu ile satır satır veriler dolaşılmaktadır.
+```
+$dataSource['data']['items']
+```
+satırı ile her bir veri için ```[ ‘view’ => [ ‘href’ => ‘#’ , ‘label’ => ‘Link’ ] ]``` formatında url ayarlanmaktadır.
+
+```getData()``` fonksiyonu etiketteki ui bileşeninden iletilen değerleri almayı sağlamaktadır.
+
+3. Controller Oluşturmak
+
+Ui/Component/Listing/Columns/DeleteAction.php dosyası için Delete Controller oluşturmak gerekmektedir.
+```
+<?php
+
+namespace Ahmet\Blog\Controller\adminhtml\post;
+
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+
+class Delete extends Action
+{
+    public $blogFactory;
+
+    public function __construct(
+        Context $context,
+        \Ahmet\Blog\Model\BlogFactory $blogFactory
+    ) {
+        $this->blogFactory = $blogFactory;
+        parent::__construct($context);
+    }
+
+    public function execute()
+    {
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $id = $this->getRequest()->getParam('post_id');
+        try {
+            $blogModel = $this->blogFactory->create();
+            $blogModel->load($id);
+            $blogModel->delete();
+            $this->messageManager->addSuccessMessage(__('You deleted the blog.'));
+        } catch (\Exception $e) {
+            $this->messageManager->addErrorMessage($e->getMessage());
+        }
+        return $resultRedirect->setPath('*/*/');
+    }
+
+    public function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Ahmet_Blog::delete');
+    }
+}
+
+```
+```post_id``` bilgisi ```getParam('post_id')``` ile alınmakta ve model yüklenmektedir.Olası başarı yada hata durumlarına karşılık mesaj eklendi ve silme işleminden sonra sayfa tekrar listeleme sayfasına yönlendirildi.
+
+Tekli silme işlemine ait ekran görüntüsü aşağıda yer almaktadır.
+![singleDelete](https://user-images.githubusercontent.com/102433124/193952582-84d6bb86-0c4d-480c-845a-4717e6fddafe.png)
 
 ## Frontend Blog Listeleme
 Blog içeriklerini ön panel de göstermek için öncelikle moduleName->Block->action.php dosyasını düzenliyoruz.
